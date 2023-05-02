@@ -1,0 +1,358 @@
+units:
+  u: U
+  $default_width: u
+  $default_height: u
+  key_cutout: 14
+
+  tangent_angle: -30
+  screw_tolerance: 0.2
+  screw_size: 3 + screw_tolerance
+  tangent_distance: 3.85
+  tab_circle_edge_thickness: 1.4
+  foot_radius: 1.5
+
+  screw_radius: screw_size / 2
+
+  tangent_distance_formula: screw_radius + tangent_distance
+  tab_circle_formula: screw_radius + tab_circle_edge_thickness
+  tab_circle_cutout_formula: screw_radius
+
+  outline_thickness: 0
+  one_plate_offsets: u/2 + outline_thickness
+  onepointfive_plate_offsets: 1.5u/2 + outline_thickness
+
+  stabilizer_width: 7 
+  stabilizer_height: 16
+  stabilizer_offset: 0 # This means south stabs, use `orient` to rotate them for north facing scenarios
+  stabilizer_spacing_3u: u * ((3 - 1) / 2)
+  stabilizer_spacing_2u: 23.86 / 2 # 0.94in / 2
+
+points:
+  key.tags.keys: true
+
+  zones.origin:
+    key:
+      width: 0
+      height: 0
+      bind: [0, 0, 0, 0]
+
+  zones.left_mods:
+    rows:
+      four:
+        width: 2.25u
+        tags:
+          - 2u_stabilizers
+          - keys
+      three:
+        width: 1.75u
+        shift: [1.75u/2 - 2.25u/2, 0]
+      two:
+        width: 1.5u
+        shift: [1.5u/2 - 1.75u/2, 0]
+      one:
+        shift: [u/2 - 1.5u/2, 0]
+    columns:
+      one:
+      two:
+        rows:
+          one.skip: true
+          two.skip: true
+          three:
+            shift: [-1.5u, 0]
+          four.skip: true
+
+  zones.alphas:
+    anchor:
+      ref: left_mods_one_four
+      shift: [1.125u + 0.5u, 0]# Half shift half Z
+    rows:
+      four:
+      three:
+        shift: [-0.5u, 0]
+      two:
+        shift: [-0.25u, 0]
+      one:
+        shift: [-0.5u, 0]
+    columns:
+      two:
+      three:
+      four:
+      five:
+      six:
+      seven:
+      eight:
+      nine:
+      ten:
+      eleven:
+      twelve:
+        rows.four.skip: true
+      thirteen:
+        rows:
+          three.skip: true
+          four.skip: true
+
+  zones.right_mods:
+    anchor:
+      ref: alphas_thirteen_four
+      shift: [-0.625u, 0]
+    rows:
+      four:
+      three:
+        width: 2.25u
+        tags:
+          - 2u_stabilizers
+          - keys
+      two.width: 1.5u
+      one:
+    columns:
+      fourteen:
+        rows:
+          one.shift: [0.375u, 0]
+          two.skip: true
+          three.skip: true
+          four.width: 1.75u
+      fifteen:
+        rows:
+          one.shift: [0.25u, 0]
+          two.shift: [0.375u, 0]
+          three.shift: [-0.625u, 0]
+          four.shift: [0.375u, 0]
+
+  zones.row_five:
+    anchor:
+      ref: left_mods_one_four
+      shift: [0, -1u]
+    rows:
+      five:
+    columns:
+      one:
+        key:
+          width: 1.5u
+          shift: [-0.375u, 0]
+      two:
+        key:
+          width: 1.5u
+          shift: [1.125u, 0]
+      three:
+        key:
+          width: 3u
+          shift: [2.375u, 0]
+          tags:
+            - 3u_stabilizers
+            - keys
+      four:
+        key:
+          width: 1u
+          shift: [3.375u, 0]
+      five:
+        key:
+          width: 3u
+          shift: [4.375u, 0]
+          tags:
+            - 3u_stabilizers
+            - keys
+      six:
+        key:
+          width: 1.5u
+          shift: [5.625u, 0]
+      seven:
+        key:
+          width: 1.5u
+          shift: [7.125u, 0]
+
+outlines:
+  plate_tab:
+    - operation: stack
+      what: polygon
+      points:
+        - shift: [0, 0]
+        - shift: [0, foot_radius]
+        - shift: [foot_radius, 0]
+          orient: tangent_angle
+        - shift: [tangent_distance_formula, 0]
+          orient: 90
+        - shift: [tab_circle_formula, 0]
+          orient: -90
+        - shift: [tab_circle_formula, 0]
+          orient: -tangent_angle*2
+        - shift: [tangent_distance_formula, 0]
+          orient: -90
+        - shift: [foot_radius, 0]
+          orient: 90
+        - shift: [foot_radius, 0]
+          orient: tangent_angle - 90
+      adjust:
+        - shift: [0, foot_radius]
+        - shift: [-foot_radius, 0]
+          orient: tangent_angle
+        - shift: [-tangent_distance_formula, 0]
+          orient: 90
+        - shift: [-tab_circle_formula, 0]
+          orient: -90
+        - shift: [0, 0]
+          orient: -tangent_angle
+        - ref: origin
+          affect: y
+    - operation: subtract
+      what: circle
+      radius: foot_radius
+      adjust:
+        - shift: [0, foot_radius]
+        - shift: [-foot_radius, 0]
+          orient: tangent_angle
+        - shift: [-tangent_distance_formula, 0]
+          orient: 90
+        - shift: [-tab_circle_formula, 0]
+          orient: -90
+        - shift: [0, 0]
+          orient: -tangent_angle
+        - ref: origin
+          affect: y
+        - shift: [0, foot_radius]
+    - operation: subtract
+      what: circle
+      radius: foot_radius
+      adjust:
+        - shift: [0, foot_radius]
+        - shift: [foot_radius, 0]
+          orient: tangent_angle
+        - shift: [tangent_distance_formula, 0]
+          orient: 90
+        - shift: [tab_circle_formula, 0]
+          orient: -90
+        - shift: [0, 0]
+          orient: -tangent_angle
+        - ref: origin
+          affect: y
+        - shift: [0, foot_radius]
+    - operation: add
+      what: circle
+      radius: tab_circle_formula
+      adjust:
+        - shift: [0, foot_radius]
+        - shift: [-tab_circle_formula, 0]
+          orient: tangent_angle
+        - shift: [tangent_distance_formula, 0]
+          orient: -90
+        - shift: [-foot_radius, 0]
+          orient: 90
+        - ref: origin
+          affect: y
+        - shift: [0, foot_radius]
+          orient: -tangent_angle
+        - shift: [foot_radius, 0]
+          orient: tangent_angle
+        - shift: [tangent_distance_formula, 0]
+          orient: 90
+        - shift: [tab_circle_formula, 0]
+          orient: -90
+    - operation: subtract
+      what: circle
+      radius: tab_circle_cutout_formula
+      adjust:
+        - shift: [0, foot_radius]
+        - shift: [-tab_circle_formula, 0]
+          orient: tangent_angle
+        - shift: [tangent_distance_formula, 0]
+          orient: -90
+        - shift: [-foot_radius, 0]
+          orient: 90
+        - ref: origin
+          affect: y
+        - shift: [0, foot_radius]
+          orient: -tangent_angle
+        - shift: [foot_radius, 0]
+          orient: tangent_angle
+        - shift: [tangent_distance_formula, 0]
+          orient: 90
+        - shift: [tab_circle_formula, 0]
+          orient: -90
+    - operation: subtract
+      what: rectangle
+      size: [20, 15]
+      where:
+        shift: [0, -7.5]
+  3u_stabilizer: # This creates the stabilizer, you just need to use its name in a `where` clause of another outline
+    - operation: stack
+      where: 3u_stabilizers # Set this tag on the keys you want
+      what: rectangle
+      size: [stabilizer_width, stabilizer_height]
+      adjust:
+        shift: [stabilizer_spacing_3u, stabilizer_offset]
+    - operation: stack
+      where: 3u_stabilizers
+      what: rectangle
+      size: [stabilizer_width, stabilizer_height]
+      adjust:
+        shift: [-stabilizer_spacing_3u, stabilizer_offset]
+  2u_stabilizer: # This creates the stabilizer, you just need to use its name in a `where` clause of another outline
+    - operation: stack
+      where: 2u_stabilizers # Set this tag on the keys you want
+      what: rectangle
+      size: [stabilizer_width, stabilizer_height]
+      adjust:
+        shift: [stabilizer_spacing_2u, stabilizer_offset]
+    - operation: stack
+      where: 2u_stabilizers
+      what: rectangle
+      size: [stabilizer_width, stabilizer_height]
+      adjust:
+        shift: [-stabilizer_spacing_2u, stabilizer_offset]
+  main:
+    - operation: stack
+      what: polygon
+      points:
+        - ref: row_five_one_five
+          shift: [-onepointfive_plate_offsets, -one_plate_offsets]
+        - ref: row_five_seven_five
+          shift: [onepointfive_plate_offsets, -one_plate_offsets]
+        - ref: right_mods_fifteen_one
+          shift: [one_plate_offsets, one_plate_offsets]
+        - ref: left_mods_one_one
+          shift: [-one_plate_offsets, one_plate_offsets]
+      fillet: 1.5
+    - operation: subtract
+      where: keys
+      what: rectangle
+      size: [key_cutout, key_cutout]
+    - operation: stack
+      name: 3u_stabilizer
+    - operation: stack
+      name: 2u_stabilizer
+    - operation: stack
+      what: rectangle
+      size: [0, 0]
+      fillet: 0.5
+    - operation: add
+      name: plate_tab
+      adjust:
+        - ref: row_five_one_five
+        - rotate: 180
+        - shift: [-1.25u, u/2]
+    - operation: add
+      name: plate_tab
+      adjust:
+        - ref: row_five_six_five
+        - rotate: 180
+        - shift: [-1.25u, u/2]
+    - operation: add
+      name: plate_tab
+      adjust:
+        - ref: row_five_four_five
+        - rotate: 180
+        - shift: [0, u/2]
+    - operation: add
+      name: plate_tab
+      adjust:
+        - ref: alphas_two_one
+        - shift: [7, 0.5u]
+    - operation: add
+      name: plate_tab
+      adjust:
+        - ref: alphas_eight_one
+        - shift: [0, 0.5u]
+    - operation: add
+      name: plate_tab
+      adjust:
+        - ref: right_mods_fourteen_one
+        - shift: [-7, 0.5u]
