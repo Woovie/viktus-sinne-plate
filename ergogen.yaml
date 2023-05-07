@@ -27,6 +27,8 @@ units:
   stabilizer_spacing_3u: u * ((3 - 1) / 2)
   stabilizer_spacing_2u: 23.86 / 2 # 0.94in / 2
 
+  viktus_logo_scale: 0.3
+
 points:
   key.tags.keys: true
 
@@ -298,6 +300,31 @@ outlines:
       size: [stabilizer_width, stabilizer_height]
       adjust:
         shift: [-stabilizer_spacing_2u, stabilizer_offset]
+  viktus_logo:
+    - operation: stack
+      what: polygon
+      points:
+        - shift: [0, 0]
+        - rotate: 60
+        - shift: [40 * viktus_logo_scale, 0]
+        - rotate: 120
+        - shift: [13 * viktus_logo_scale, 0]
+        - rotate: 60
+        - shift: [14 * viktus_logo_scale, 0]
+        - rotate: -120
+        - shift: [14 * viktus_logo_scale, 0]
+        - rotate: 60
+        - shift: [13 * viktus_logo_scale, 0]
+    - operation: stack
+      what: polygon
+      points:
+        - shift: [0, 30 * viktus_logo_scale]
+        - rotate: 60
+        - shift: [10 * viktus_logo_scale, 0]
+        - rotate: 60
+        - shift: [10 * viktus_logo_scale, 0]
+        - rotate: 120
+        - shift: [10 * viktus_logo_scale, 0]
   main:
     - operation: stack
       what: polygon
@@ -356,3 +383,13 @@ outlines:
       adjust:
         - ref: right_mods_fourteen_one
         - shift: [-7, 0.5u]
+    - operation: subtract
+      name: viktus_logo
+      adjust:
+        - ref: row_five_one_five
+        - shift: [1.25u, -0.35u]
+    - operation: subtract
+      name: viktus_logo
+      adjust:
+        - ref: row_five_six_five
+        - shift: [1.25u, -0.35u]
